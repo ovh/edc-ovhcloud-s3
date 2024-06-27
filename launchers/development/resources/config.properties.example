@@ -1,0 +1,29 @@
+edc.hostname=localhost
+edc.participant.id=consumer
+
+web.http.port=29191
+web.http.path=/api
+
+web.http.control.port=29192
+web.http.control.path=/control
+
+web.http.management.port=29193
+web.http.management.path=/management
+
+web.http.public.port=29291
+web.http.public.path=/public
+
+web.http.protocol.port=29194
+web.http.protocol.path=/protocol
+edc.dsp.callback.address=http://localhost:29194/protocol
+
+edc.api.auth.key=password
+
+edc.vault.clientid=consumer
+edc.vault.tenantid=1
+edc.vault.certificate=/resources/
+edc.vault.name=consumer
+
+edc.ovhcloud.s3.access.key=<YOUR S3 KEY>
+edc.ovhcloud.s3.secret.key=<YOUR S3 KEY SECRET>
+edc.ovhcloud.s3.endpoint=https://s3.gra.io.cloud.ovh.net

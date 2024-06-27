@@ -1,0 +1,41 @@
+name: publish
+
+on: 
+  workflow_dispatch:
+    inputs:
+        libs_version:
+          description: 'Version string that is used for publishing (e.g. "1.0.0", NOT "v1.0.0").'
+          required: true
+          type: string
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+-*'
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' # so this workflow runs only for a tag on the 'main' branch
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+ 
+      - name: publish
+        run: ./gradlew build publish closeAndReleaseStagingRepositories --info
+        env:
+          OSSRH_HOSTNAME: ${{ vars.SONATYPE_HOSTNAME }}
+          OSSRH_USERNAME: ${{ vars.SONATYPE_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          EDC_EXTENSIONS_VERSION: ${{ inputs.libs_version || github.ref_name }}
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_KEY_PASSPHRASE: ${{ secrets.SIGNING_KEY_PASSPHRASE }}
+      
+
