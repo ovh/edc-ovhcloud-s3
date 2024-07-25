@@ -14,7 +14,7 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' # so this workflow runs only for a tag on the 'main' branch
+    if: github.event.base_ref == 'refs/heads/main' # so this workflow runs only for a tag on the 'main' branch
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -29,7 +29,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
  
       - name: publish
-        run: ./gradlew build publish closeAndReleaseStagingRepositories --info
+        run: ./gradlew build publish closeAndReleaseStagingRepositories
         env:
           OSSRH_HOSTNAME: ${{ vars.SONATYPE_HOSTNAME }}
           OSSRH_USERNAME: ${{ vars.SONATYPE_USERNAME }}
